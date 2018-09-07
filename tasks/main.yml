@@ -1,0 +1,15 @@
+- name: Ensure redis is installed.
+  apt: name=redis-server state=installed
+
+- name: Ensure Redis is configured.
+  template:
+    src: redis.conf.j2
+    dest: "/etc/redis/redis.conf"
+    mode: 0644
+  notify: restart redis
+
+- name: Ensure redis is running and enabled on boot.
+  service: "name=redis-server state=started enabled=yes"
+
+- include: extra_instances.yml
+  when: redis_extra_instances|length > 0

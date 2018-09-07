@@ -1,0 +1,54 @@
+- name: Add additional startup scripts
+  template:
+    src: "redis.init.j2"
+    dest: "/etc/init.d/redis-server-{{ port }}"
+    owner: root
+    group: root
+    mode: 0755
+  with_items: "{{ redis_extra_instances }}"
+  loop_control:
+    loop_var: port
+  register: extra_redis_startup_scripts
+
+- name: Install systemd service script
+  copy:
+    src: redis.service
+    dest: /etc/systemd/system/redis@.service
+  notify: reload systemctl
+
+- name: Add additional configuration file
+  template:
+    src: "redis_extra.conf.j2"
+    dest: "/etc/redis/redis-{{ port }}.conf"
+  with_items: "{{ redis_extra_instances }}"
+  loop_control:
+    loop_var: port
+  register: extra_redis_configs
+
+- name: Add extra data dirs
+  file:
+    path: "{{ redis_dbdir }}-{{ port }}"
+    state: directory
+    owner: redis
+    group: redis
+  with_items: "{{ redis_extra_instances }}"
+  loop_control:
+    loop_var: port
+
+- name: Enable service
+  command: "systemctl enable redis@{{ item.port }}.service"
+  with_items: "{{ extra_redis_startup_scripts.results }}"
+  when: item.changed == true
+
+- name: Start extra instances
+  service:
+    name: "redis-server-{{ item }}"
+    state: started
+  with_items: "{{ redis_extra_instances }}"
+
+- name: Restart instances if config has changed
+  service:
+    name: "redis-server-{{ item.port }}"
+    state: restarted
+  when: item.changed
+  with_items: "{{ extra_redis_configs.results }}"
