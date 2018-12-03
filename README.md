@@ -45,3 +45,7 @@ redis_extra_instances: []
 redis_includes: []
 
 ```
+
+# Development
+
+Please check [development guide](DEVELOPMENT.md) for details about developing and testing this role.

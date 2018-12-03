@@ -1,5 +1,7 @@
 - name: Ensure redis is installed.
-  apt: name=redis-server state=installed
+  apt:
+    name: redis-server
+    state: present
 
 - name: Ensure Redis is configured.
   template:
