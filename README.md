@@ -1,6 +1,6 @@
 # redis
 
-[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-redis.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-memcached)
+[![Build Status](https://travis-ci.com/iroquoisorg/ansible-role-redis.svg?branch=master)](https://travis-ci.com/iroquoisorg/ansible-role-redis)
 
 Ansible role for redis
 
@@ -13,7 +13,7 @@ This role was prepared and tested for Ubuntu 16.04.
 # Default settings
 
 ```
-
+---
 redis_port: 6379
 redis_bind_interface: 127.0.0.1
 redis_unixsocket: ''
@@ -43,7 +43,6 @@ redis_extra_instances: []
 
 # Add extra include files for local configuration/overrides.
 redis_includes: []
-
 ```
 
 # Development
