@@ -15,7 +15,7 @@ before_install:
 install:
   # Install Ansible.
   - pip install ansible==2.5.4
-  - pip install molecule
+  - pip install molecule==2.22
   - pip install docker
 
 script:
